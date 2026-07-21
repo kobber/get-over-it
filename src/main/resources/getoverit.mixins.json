@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "kobber.getoverit.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "minecraft.PlayerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "client": [
+    "minecraft.HumanoidModelMixin"
+  ]
+}

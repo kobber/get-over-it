@@ -1,0 +1,17 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="https://github.com/kobber/get-over-it/issues"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+logoFile= "pack.png"
+authors="Kobber"
+description='''
+Don't let yourself be stopped by two block tall walls. Just pull yourself up and get over it!
+'''
+
+[[mixins]]
+config="${mod_id}.mixins.json"
