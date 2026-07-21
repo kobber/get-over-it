@@ -36,11 +36,12 @@ public class PlayerMixin implements PlayerWithClimbingAnim {
     @Inject(method = "travel", at = @At("HEAD"))
     private void onTravel(Vec3 travelVector, CallbackInfo ci) {
         Player player = (Player) (Object) this;
+        boolean wasClimbing = ClimbingState.isClimbing(player);
         float climbingSpeed = 0.1F;
         float climbingSpeedMax = 0.3F;
         float horizontalDampening = 0.5F;
 
-        if (ClimbingState.isClimbing(player)) {
+        if (wasClimbing) {
             player.setDeltaMovement(new Vec3(player.getDeltaMovement().x * horizontalDampening, Math.min(player.getDeltaMovement().y + climbingSpeed, climbingSpeedMax), player.getDeltaMovement().z * horizontalDampening));
         }
 
@@ -57,11 +58,11 @@ public class PlayerMixin implements PlayerWithClimbingAnim {
                     return;
                 }
 
-                double yVelocity = Math.abs(player.getDeltaMovement().y);
-                if (yVelocity < 0.005) {
+                double yVelocity = player.getDeltaMovement().y;
+                if (yVelocity < 0.005 && yVelocity > -0.7) {
                     this.getoverit$climbAnimTime = this.getoverit$getMaxClimbAnimTime();
                     ClimbingState.setClimbing(player, true);
-                    this.getoverit$edgeY = player.position().y + 1.05;
+                    this.getoverit$edgeY = player.position().y + 1.05 + yVelocity * -1;
                 }
 
                 AABB collisionBox = player.getBoundingBox().move(0, this.getoverit$edgeY - player.getY(), 0).move(horizontalTravelDirection.normalize().scale(0.25));
@@ -69,6 +70,8 @@ public class PlayerMixin implements PlayerWithClimbingAnim {
 
                 if (collision) {
                     ClimbingState.setClimbing(player, false);
+                } else if (ClimbingState.isClimbing(player) && !wasClimbing) {
+                    player.setDeltaMovement(player.getDeltaMovement().multiply(1, 0, 1));
                 }
             } else {
                 ClimbingState.setClimbing(player, false);
