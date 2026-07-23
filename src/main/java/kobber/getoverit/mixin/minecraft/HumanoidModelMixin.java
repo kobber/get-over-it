@@ -54,6 +54,8 @@ public class HumanoidModelMixin<T extends LivingEntity> {
                     model.rightLeg.zRot = 0;
                     model.leftLeg.zRot = 0;
 
+                    model.hat.copyFrom(model.head);
+
                     climbingPlayer.getoverit$setClimbAnimTime(animTime - 1);
                 }
             }
